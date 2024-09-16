@@ -1,7 +1,7 @@
 const mongoose =require('mongoose');
 const validator=require('validator');
 
-const UserShema = mongoose.Schema({
+const UserShema =  new mongoose.Schema({
     name:{
         type :string,
         required : [true ,'name is required'],

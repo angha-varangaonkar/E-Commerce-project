@@ -3,12 +3,12 @@ const validator=require('validator');
 
 const UserShema =  new mongoose.Schema({
     name:{
-        type :string,
+        type :String,
         required : [true ,'name is required'],
         maxLength : 40
     },
     email:{
-        type :string ,
+        type :String ,
         required : [true ,'email is required'],
         unique :true,
         validate :{
@@ -17,12 +17,12 @@ const UserShema =  new mongoose.Schema({
         }
     },
     phone :{
-        type:string ,
+        type:String ,
         required: [true ,'phone number is required'],
 
     },
     password :{
-        type :string,
+        type :String,
         required:[true, 'password is required'],
         validate:{
             validator: function (value){

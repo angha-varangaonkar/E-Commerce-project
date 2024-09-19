@@ -35,54 +35,54 @@ if(user){
     //     }
 
 
-// exports.login=async(req, res)=>{
-//      try {
-//           //step check email if user exists
-//        const { email, password} = req.body;
-//        const user = await user.findOne({ email });
-
-//        //   console.log(user)
-//        if (!user) {
-//           return res.status(400).send('user is not registerred,please register and try again')
-//        }
-
-//        //step 2 match the password
-//        const isPasswordMatch = await bcrypt.compare(password, user.password);
-//        if (!isPasswordMatch) {
-//           return res.status(400).send('invalid password')
-//        }
-
-//        res.status(200).json({
-//        message:"login sucessful "
-//        });
-
-//      }catch (error) {
-//        res.status(404).send('error');
-//      }
-//   };
-
-
-
-exports.login = async (req, res) => {
+exports.login=async(req, res)=>{
      try {
           //step check email if user exists
-       const { email, password } = req.body;
+       const { email, password} = req.body;
        const user = await User.findOne({ email });
-   
+
+       //   console.log(user)
        if (!user) {
-         return res.status(400).send('user is not registerred,please register and try again');
+          return res.status(400).send('user is not registerred,please register and try again')
        }
-       
+
        //step 2 match the password
        const isPasswordMatch = await bcrypt.compare(password, user.password);
        if (!isPasswordMatch) {
-         return res.status(400).send('invalid password');
+          return res.status(400).send('invalid password')
        }
-   
+
        res.status(200).json({
-         message: "Login successful"
+       message:"login successful "
        });
-     } catch (error) {
+
+     }catch (error) {
        res.status(404).send('error');
      }
-   };
+  };
+
+
+
+// exports.login = async (req, res) => {
+//      try {
+//           //step check email if user exists
+//        const { email, password } = req.body;
+//        const user = await User.findOne({ email });
+   
+//        if (!user) {
+//          return res.status(400).send('user is not registerred,please register and try again');
+//        }
+       
+//        //step 2 match the password
+//        const isPasswordMatch = await bcrypt.compare(password, user.password);
+//        if (!isPasswordMatch) {
+//          return res.status(400).send('invalid password');
+//        }
+   
+//        res.status(200).json({
+//          message: "Login successful"
+//        });
+//      } catch (error) {
+//        res.status(404).send('error');
+//      }
+//    };

@@ -1,7 +1,8 @@
 const mongoose =require('mongoose');
 const validator=require('validator');
+const bcrypt =require('bcrypt');
 
-const UserShema =  new mongoose.Schema({
+const UserSchema =  new mongoose.Schema({
     name:{
         type :String,
         required : [true ,'name is required'],
@@ -21,7 +22,7 @@ const UserShema =  new mongoose.Schema({
         required: [true ,'phone number is required'],
 
     },
-    password :{
+    password:{
         type :String,
         required:[true, 'password is required'],
         validate:{
@@ -39,6 +40,20 @@ const UserShema =  new mongoose.Schema({
     }
 });
 
-const user =mongoose.model("User",UserShema);
+
+//hashing
+UserSchema.pre('save', async function(next){
+    // console.log('new document');
+    
+    //if password is not modified then we dont have to hash it again 
+    if (!this.isModified('password')) return next()
+
+    //if it is modified then hash it again 
+       this.password = await bcrypt.hash(this.password ,12)
+    next() ;
+    
+}); 
+
+const user = mongoose.model("User",UserSchema);
 
 module.exports=user;

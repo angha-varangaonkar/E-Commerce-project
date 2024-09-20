@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes,Route } from 'react-router-dom'
 import Signup from './Pages/Signup'
-
+import {Toaster} from 'sonner'
 
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path='/register' element={<Signup/>}/>
       </Routes>
-     
+      <Toaster position="bottom-right"/>
 
     </div>
   )

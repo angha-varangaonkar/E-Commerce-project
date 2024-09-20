@@ -1,15 +1,18 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import axios from 'axios'
 import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
+
 
 function Signup() {
   // Define the validation schema
   const schema = z.object({
     name: z.string().min(1, "Name is required").max(40, "Name cannot exceed 40 characters"),
     email: z.string().email("Invalid email address"),
-    phone: z.string().min(10, "Phone number must be at least 10 digits").max(15, "Phone number cannot exceed 15 digits"),
-    password: z.string().min(6, "Password must be at least 6 characters long").max(20, "Password cannot exceed 20 characters")
+    phone: z.string().min(10, "Phone number must be at least 10 digits").max(11, "Phone number cannot exceed 15 digits"),
+    password: z.string().min(6, "Password must be at least 6 characters long").max(20, "Password cannot exceed 20 characters").regex(/[0-9]/,"password must contain one number").regex(/[A-Z]/,"password must contain atleast one uppercase ").regex(/[^a-zA-Z0-9\s]/,"password should contain atleast on special character")
   });
 
   // Initialize useForm with real-time validation
@@ -18,12 +21,21 @@ function Signup() {
     mode: 'onBlur'
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async(data) => {
+    try {
+      const res = await axios.post("http://localhost:3000/api/register",data)
+      toast.success("user registerd sucessfully")
+      
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data)
+      
+      
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black p-4">
+    <div className="min-h-screen flex items-center justify-center bg-blue-300 p-4">
       <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-gray-800">Signup</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

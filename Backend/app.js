@@ -2,6 +2,9 @@ const express= require('express');
 const app =express();
 const dbConnect=require('./db');
 const colors= require('colors');
+const cors =require('cors')
+
+app.use(cors());
 
 
 

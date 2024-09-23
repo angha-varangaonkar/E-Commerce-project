@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('./../models/userModel')
-
+const jwt =require('jsonwebtoken')
 
 exports.register = async(req,res) => {
    try {
@@ -52,8 +52,17 @@ exports.login=async(req, res)=>{
           return res.status(400).send('invalid password')
        }
 
+
+       //genetrate  token and send it to response  so we can get in the frontend 
+       const token = jwt.sign({
+         id : user._id ,
+         role : user.role,
+         name : user.name
+    },'this-is-a-string',{expiresIn : '30d'})
+
        res.status(200).json({
-       message:"login successful "
+       message:"login successful ",
+       token
        });
 
      }catch (error) {

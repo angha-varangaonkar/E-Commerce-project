@@ -1,20 +1,32 @@
-const express= require('express');
-const app =express();
-const dbConnect=require('./db');
-const colors= require('colors');
-const cors =require('cors')
-
-app.use(cors());
-
-
-
-
-const port =3000;
+const express = require('express');
+const app = express();
+const dbConnect = require('./db');
+const PORT = 3000;
+const colors = require('colors');
+const cors = require('cors')
+app.use(cors())
+//NOTE fn to connect with the mongodb
 dbConnect();
+
+//NOTE middleware to parse the req.body data
 app.use(express.json());
 
-app.use('/api',require('./routes/userRoutes'))
+//NOTE Routes middleware
+app.use('/api', require('./routes/userRoutes'));
+app.use('/api',require('./routes/categoryRoutes'
+))
 
-app.listen(port,()=>{
-    console.log(colors.magenta(`app is listening on the port :${port}`));
+//NOTE GLOBAL ROUTES HANDLER (middleware)
+app.use((req, res, next) => {
+  res.status(404).json({
+    error: `Requested url ${req.url} not found`,
+  });
+  next();
+});
+
+//global error handler for our app this will send response for all the errors in our app
+
+//listening on the server
+app.listen(PORT, () => {
+  console.log(colors.yellow(`App is listening on the port:${PORT}`));
 });

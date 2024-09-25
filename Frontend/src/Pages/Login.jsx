@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { userLogin } from '../Redux/userSlice';
-import { useDispatch } from 'react-redux';
+import { userLogin } from '../redux/userSlice';
+import { useDispatch , useSelector } from 'react-redux';
 import { FaGoogle, FaUser, FaLock } from 'react-icons/fa';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
@@ -10,12 +10,24 @@ import { useNavigate , useLocation } from 'react-router-dom';
 
 function Login() {
   const { handleSubmit, register, formState: { errors } } = useForm(); 
+  const {role} = useSelector((state)=>state.user)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   console.log(location.pathname)
 
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(()=>{
+    if(role ==='user' && location.pathname !== '/' ){
+   navigate('/')
+    }
+     if(role==='admin' && location.pathname !== 'dashboard'){
+      navigate('/dashboard')
+    }
+
+  },[role,navigate,location.pathname])
+
 
   const onSubmit = (data) => {
     console.log(data);
@@ -76,7 +88,7 @@ function Login() {
       
         <button
           className="flex items-center justify-center mt-5 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded w-full"
-         
+         onClick={()=>window.location.href="http://localhost:3000/api/auth/google"}
         >
           <FaGoogle className="mr-2" />
           Login with Google

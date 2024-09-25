@@ -1,8 +1,13 @@
-const express=require('express');
-const userController =require('./../controllers/userController')
-const router = express.Router();
+const express = require('express') ;
+const userController = require('./../controllers/userController')
+const passport = require('passport')
+const router = express.Router() ;
 
-router.post('/register',userController.register)//this is register
-router.post('/login',userController.login)//this is for login 
+router.post('/register',userController.register)
+router.post('/login',userController.login)
 
-module.exports = router;
+router.get('/auth/google' , passport.authenticate('google' , {scope: ['profile', 'email']})) ;
+
+router.get('/auth/google/callback' , passport.authenticate('google' , {failureRedirect : '/login', session : false}),userController.GoogleAuth)
+
+module.exports = router ;

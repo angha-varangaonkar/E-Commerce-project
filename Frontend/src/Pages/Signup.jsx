@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useDispatch, useSelector } from 'react-redux';
-import { Register } from '../Redux/userSlice';
+import { Register } from '../redux/userSlice';
 
 import { FaUser, FaEnvelope, FaPhone, FaLock } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -35,7 +35,7 @@ function Signup() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-blue-500">
       <div className="p-8 w-[25rem] shadow-lg bg-white rounded-md">
         <h1 className="text-black font-bold text-3xl text-center mb-4">Signup</h1>
         <form onSubmit={handleSubmit(onSubmit)}>

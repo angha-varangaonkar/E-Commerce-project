@@ -1,64 +1,64 @@
-const mongoose =require('mongoose');
-const validator=require('validator');
-const bcrypt =require('bcrypt');
-
-const UserSchema =  new mongoose.Schema({
-    name:{
-        type :String,
-        required : [true ,'name is required'],
-        maxLength : 40
+const mongoose = require('mongoose');
+const validator = require('validator');
+const bcrypt = require('bcrypt') ;
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Name is required'],
+    maxLength: 40,
+  },
+  email: {
+    type: String,
+    required: [true, 'Email is required'],
+    unique: true,
+    validate: {
+      validator: validator.isEmail,
+      message: 'Please enter a Valid Email',
     },
-    email:{
-        type :String ,
-        required : [true ,'email is required'],
-        unique :true,
-        validate :{
-            validator : validator.isEmail,
-            message : "please enter a valid email"
-        }
+  },
+  phone: {
+    type: String,
+   
+  },
+  password: {
+    type: String,
+   
+    validate: {
+      validator: function (value) {
+   if(this.googleId) return true ;
+        return validator.isStrongPassword(value, {
+          minLength: 8,
+          minLowercase: 1,
+          minUppercase: 1,
+          minNumbers: 1,
+          minSymbols: 1,
+        });
+      },
+      message: 'Password must contain 1 uppercase , 1 lowercase , 1 number , 1 symbol ',
     },
-    phone :{
-        type:String ,
-        required: [true ,'phone number is required'],
-
-    },
-    password:{
-        type :String,
-        required:[true, 'password is required'],
-        validate:{
-            validator: function (value){
-                return validator.isStrongPassword(value, {
-                    minLength: 8,
-                    minLowercase: 1,
-                    minUppercase: 1,
-                    minNumbers: 1,
-                    minSymbols: 1
-                })
-        },
-        message:"not a strong password "
-        }
-    },
-    role :{
-        type :'string',
-        enum :['admin','user'],
-        default : 'user'
-    }
+  },
+  role : {
+    type : String,
+    enum : ['admin', 'user'],
+    default : 'user'
+  },
+  googleId : {
+    type : String,
+    unique : true,
+    sparse : true
+  }
 });
 
+userSchema.pre('save', async function(next){
+  //if password is not modified we don't need to hash the password again
+  if(!this.isModified('password')) next()
+//if it is modified hash the password again 
+this.password =  await bcrypt.hash(this.password , 12)
+  next()
+})
 
-//hashing
-UserSchema.pre('save', async function(next){
-    // console.log('new document');
-    
-    //if password is not modified then we dont have to hash it again 
-    if (!this.isModified('password')) return next()
+//NOTE this keyword points to the document we are going to save in the db.
 
-    //if it is modified then hash it again 
-       this.password = await bcrypt.hash(this.password ,12)
-    next() ;
-    
-}); 
+const User = mongoose.model('User', userSchema);
 
-const user = mongoose.model("User",UserSchema);
-
-module.exports=user;
+module.exports = User;
